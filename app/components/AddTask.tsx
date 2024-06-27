@@ -46,6 +46,7 @@ const AddTask = () => {
                         type="text"
                         placeholder="Type task here"
                         className="input input-bordered w-full"
+                        autoFocus
                         required />
                 </div>
 

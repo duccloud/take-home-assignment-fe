@@ -73,7 +73,10 @@ const Task: React.FC<TaskProps> = ({ task }) => {
                             onChange={(e) => setTaskToEdit(e.target.value)}
                             type="text"
                             placeholder="Type here"
-                            className="input input-bordered w-full" />
+                            className="input input-bordered w-full"
+                            autoFocus
+                            required
+                        />
                     </div>
 
                     <div className='form-control'>
