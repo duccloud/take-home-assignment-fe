@@ -15,7 +15,7 @@ const Task: React.FC<TaskProps> = ({ task }) => {
     const router = useRouter();
     const [openModalEdit, setOpenModalEdit] = useState<boolean>(false);
     const [openModalDelete, setOpenModalDelete] = useState<boolean>(false);
-    const [taskToEdit, setTaskToEdit] = useState<string>(task.text)
+    const [taskToEdit, setTaskToEdit] = useState<string | undefined>(task.text)
     const [descriptionToEdit, setDescriptionToEdit] = useState<string | undefined>(task.description)
     const [markDone, setMarkDone] = useState<boolean | undefined>(task.done)
 
@@ -25,8 +25,23 @@ const Task: React.FC<TaskProps> = ({ task }) => {
             id: task.id,
             text: taskToEdit,
             description: descriptionToEdit,
+            done: markDone
         });
         setOpenModalEdit(false);
+        router.refresh()
+    }
+
+    const handleMMarkDone = async (id: string) => {
+        console.log("Curent markDone is ", markDone);
+        setMarkDone(!markDone)
+
+        await editTodo({
+            id: task.id,
+            text: taskToEdit,
+            description: descriptionToEdit,
+            done: !markDone
+        });
+
         router.refresh()
     }
 
@@ -37,7 +52,7 @@ const Task: React.FC<TaskProps> = ({ task }) => {
 
     return <tr key={task.id}>
         <td className='w-1/8'>
-            <input onChange={(e) => setMarkDone(e.target.checked)} type="checkbox" checked={markDone} className="checkbox" />
+            <input onChange={(e) => handleMMarkDone(task.id)} type="checkbox" checked={markDone} className="checkbox" />
         </td>
         <td className={`w-1/2 ${markDone ? 'text-gray-400' : ''}`}>{task.text}</td>
         <td className={`w-1/2 ${markDone ? 'text-gray-400' : ''}`}>{task.description}</td>
