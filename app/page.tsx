@@ -1,11 +1,17 @@
-import Image from "next/image";
+import { getAllTodos } from "@/public/api";
+import AddTask from "./components/AddTask";
+import TodoList from "./components/TodoList";
 
-export default function Home() {
+export default async function Home() {
+  const tasks = await getAllTodos();
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        Hello there
+    <main className="max-w-4xl mx-auto mt-4">
+      <div className="text-center my-5 flex flex-col gap-4">
+        <h1 className="text-2xl font-bold">Todo List App</h1>
+        <AddTask />
       </div>
+      <TodoList tasks={tasks} />
     </main>
   );
 }
