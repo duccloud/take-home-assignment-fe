@@ -11,34 +11,57 @@ const AddTask = () => {
     const router = useRouter();
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [newTaskValue, setNewTaskValue] = useState<string>('');
+    const [newDescriptionValue, setNewDescriptionValue] = useState<string>('');
 
     const handleSubmitNewTodo: FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
         await addTodo({
             id: uuidv4(),
-            text: newTaskValue
+            text: newTaskValue,
+            description: newDescriptionValue
         });
         setNewTaskValue("");
+        setNewDescriptionValue("");
         setModalOpen(false);
         router.refresh()
     }
 
     return <div>
-        <button onClick={() => setModalOpen(true)} className="btn btn-primary w-full">Add a new task
+        <button onClick={() => setModalOpen(true)} className="btn btn-primary w-full">Add new task
             <AiOutlinePlus className='ml-2' size={18} />
         </button>
 
         <Modal modalOpen={modalOpen} setModalOpen={setModalOpen}>
-            <form onSubmit={handleSubmitNewTodo}>
+            <form onSubmit={handleSubmitNewTodo} className="space-y-4">
                 <h3 className='font-bold text-lg'>Add new task</h3>
-                <div className='modal-action'>
+                <div className='form-control'>
+                    <label className='label'>
+                        <span className='label-text'>Task <span className='text-red-500'>*</span>
+                        </span>
+                    </label>
                     <input
                         value={newTaskValue}
                         onChange={(e) => setNewTaskValue(e.target.value)}
                         type="text"
-                        placeholder="Type here"
+                        placeholder="Type task here"
+                        className="input input-bordered w-full"
+                        required />
+                </div>
+
+                <div className='form-control'>
+                    <label className='label'>
+                        <span className='label-text'>Description</span>
+                    </label>
+                    <input
+                        value={newDescriptionValue}
+                        onChange={(e) => setNewDescriptionValue(e.target.value)}
+                        type="text"
+                        placeholder="Type description here"
                         className="input input-bordered w-full" />
-                    <button type="submit" className='btn'>Submit</button>
+                </div>
+
+                <div className='form-control'>
+                    <button type="submit" className='btn w-full'>Submit</button>
                 </div>
             </form>
         </Modal>
