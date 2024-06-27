@@ -10,6 +10,7 @@ const TodoList: React.FC<TodoListProps> = ({ tasks }) => {
     <table className="table w-full">
       <thead>
         <tr>
+          <th>_</th>
           <th>Task</th>
           <th>Description</th>
           <th>Actions</th>

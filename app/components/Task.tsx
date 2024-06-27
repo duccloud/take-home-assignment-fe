@@ -16,12 +16,15 @@ const Task: React.FC<TaskProps> = ({ task }) => {
     const [openModalEdit, setOpenModalEdit] = useState<boolean>(false);
     const [openModalDelete, setOpenModalDelete] = useState<boolean>(false);
     const [taskToEdit, setTaskToEdit] = useState<string>(task.text)
+    const [descriptionToEdit, setDescriptionToEdit] = useState<string | undefined>(task.description)
+    const [markDone, setMarkDone] = useState<boolean | undefined>(task.done)
 
     const handleSubmitEditTodo: FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
         await editTodo({
             id: task.id,
-            text: taskToEdit
+            text: taskToEdit,
+            description: descriptionToEdit,
         });
         setOpenModalEdit(false);
         router.refresh()
@@ -33,23 +36,47 @@ const Task: React.FC<TaskProps> = ({ task }) => {
     }
 
     return <tr key={task.id}>
-        <td className='w-1/2'>{task.text}</td>
-        <td className='w-1/2'>{task.description}</td>
+        <td className='w-1/8'>
+            <input onChange={(e) => setMarkDone(e.target.checked)} type="checkbox" checked={markDone} className="checkbox" />
+        </td>
+        <td className={`w-1/2 ${markDone ? 'text-gray-400' : ''}`}>{task.text}</td>
+        <td className={`w-1/2 ${markDone ? 'text-gray-400' : ''}`}>{task.description}</td>
         <td className='w-1/8 flex gap-5'>
             <FiEdit onClick={() => setOpenModalEdit(true)} cursor="pointer" className="text-blue-500" size={25} />
 
             <Modal modalOpen={openModalEdit} setModalOpen={setOpenModalEdit}>
-                <form onSubmit={handleSubmitEditTodo}>
+                <form onSubmit={handleSubmitEditTodo} className="space-y-4">
                     <h3 className='font-bold text-lg'>Edit task</h3>
-                    <div className='modal-action'>
+
+                    <div className='form-control'>
+                        <label className='label'>
+                            <span className='label-text'>Task <span className='text-red-500'>*</span>
+                            </span>
+                        </label>
                         <input
                             value={taskToEdit}
                             onChange={(e) => setTaskToEdit(e.target.value)}
                             type="text"
                             placeholder="Type here"
                             className="input input-bordered w-full" />
-                        <button type="submit" className='btn'>Submit</button>
                     </div>
+
+                    <div className='form-control'>
+                        <label className='label'>
+                            <span className='label-text'>Description</span>
+                        </label>
+                        <input
+                            value={descriptionToEdit}
+                            onChange={(e) => setDescriptionToEdit(e.target.value)}
+                            type="text"
+                            placeholder="Type description here"
+                            className="input input-bordered w-full" />
+                    </div>
+
+                    <div className='form-control'>
+                        <button type="submit" className='btn w-full'>Submit</button>
+                    </div>
+
                 </form>
             </Modal>
 

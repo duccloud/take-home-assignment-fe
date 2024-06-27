@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.text-gray-400 {
+    color: #cbd5e0; /* or any shade of gray you prefer */
+  }
