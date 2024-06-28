@@ -1,7 +1,7 @@
 import { ITask } from "@/types/tasks";
 import { promises } from "dns";
 
-const baseUrl = "http://localhost:3001";
+const baseUrl = "https://json-server-vercel-hazel-two.vercel.app";
 
 export const getAllTodos = async (): Promise<ITask[]> => {
     const res = await fetch(`${baseUrl}/tasks`, { cache: 'no-store' });
