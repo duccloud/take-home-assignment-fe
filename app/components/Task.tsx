@@ -17,10 +17,14 @@ const Task: React.FC<TaskProps> = ({ task }) => {
     const [openModalDelete, setOpenModalDelete] = useState<boolean>(false);
     const [taskToEdit, setTaskToEdit] = useState<string | undefined>(task.text)
     const [descriptionToEdit, setDescriptionToEdit] = useState<string | undefined>(task.description)
-    const [markDone, setMarkDone] = useState<boolean | undefined>(task.done)
+    const [markDone, setMarkDone] = useState<boolean | undefined>(task.done);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [deleting, setDeleting] = useState<boolean>(false);
 
     const handleSubmitEditTodo: FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
+        setLoading(true);
+
         await editTodo({
             id: task.id,
             text: taskToEdit,
@@ -28,6 +32,7 @@ const Task: React.FC<TaskProps> = ({ task }) => {
             done: markDone
         });
         setOpenModalEdit(false);
+        // setLoading(false);
         router.refresh()
     }
 
@@ -46,7 +51,9 @@ const Task: React.FC<TaskProps> = ({ task }) => {
     }
 
     const handleDeleteTask = async (id: string) => {
+        setDeleting(true);
         await deleteTodo(id);
+        // setDeleting(false);
         router.refresh()
     }
 
@@ -92,7 +99,9 @@ const Task: React.FC<TaskProps> = ({ task }) => {
                     </div>
 
                     <div className='form-control'>
-                        <button type="submit" className='btn w-full'>Submit</button>
+                        <button type="submit" className='btn w-full' disabled={loading}>
+                            {loading ? 'Submitting...' : 'Submit'}
+                        </button>
                     </div>
 
                 </form>
@@ -106,6 +115,7 @@ const Task: React.FC<TaskProps> = ({ task }) => {
                     <button
                         onClick={() => handleDeleteTask(task.id)}
                         className="btn"
+                        disabled={deleting}
                     >Yes</button>
                 </div>
             </Modal>

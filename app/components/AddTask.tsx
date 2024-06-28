@@ -12,9 +12,12 @@ const AddTask = () => {
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [newTaskValue, setNewTaskValue] = useState<string>('');
     const [newDescriptionValue, setNewDescriptionValue] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleSubmitNewTodo: FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
+        setLoading(true);
+
         await addTodo({
             id: uuidv4(),
             text: newTaskValue,
@@ -24,6 +27,7 @@ const AddTask = () => {
         setNewTaskValue("");
         setNewDescriptionValue("");
         setModalOpen(false);
+        setLoading(false);
         router.refresh()
     }
 
@@ -63,7 +67,9 @@ const AddTask = () => {
                 </div>
 
                 <div className='form-control'>
-                    <button type="submit" className='btn w-full'>Submit</button>
+                    <button type="submit" className='btn w-full' disabled={loading}>
+                        {loading ? 'Submitting...' : 'Submit'}
+                    </button>
                 </div>
             </form>
         </Modal>
